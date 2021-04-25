@@ -1,7 +1,7 @@
-package com.loladebadmus.simplecrudapp.service;
+package com.loladebadmus.simplecrudapp.movies.service;
 
-import com.loladebadmus.simplecrudapp.dao.MovieDao;
-import com.loladebadmus.simplecrudapp.model.Movie;
+import com.loladebadmus.simplecrudapp.movies.dao.MovieDao;
+import com.loladebadmus.simplecrudapp.movies.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

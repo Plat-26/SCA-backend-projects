@@ -1,6 +1,6 @@
-package com.loladebadmus.simplecrudapp.dao;
+package com.loladebadmus.simplecrudapp.rentals.dao;
 
-import com.loladebadmus.simplecrudapp.model.Rental;
+import com.loladebadmus.simplecrudapp.rentals.model.Rental;
 
 import java.util.List;
 import java.util.Optional;

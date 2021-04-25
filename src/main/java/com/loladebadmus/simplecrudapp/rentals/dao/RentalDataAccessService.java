@@ -1,6 +1,6 @@
-package com.loladebadmus.simplecrudapp.dao;
+package com.loladebadmus.simplecrudapp.rentals.dao;
 
-import com.loladebadmus.simplecrudapp.model.Rental;
+import com.loladebadmus.simplecrudapp.rentals.model.Rental;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component("rental_list")
-public class RentalDataAccessService implements RentalDao{
+public class RentalDataAccessService implements RentalDao {
 
     final static List<Rental> rental_db = new ArrayList<>();
 

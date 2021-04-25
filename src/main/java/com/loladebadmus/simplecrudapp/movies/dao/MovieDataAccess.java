@@ -1,6 +1,6 @@
-package com.loladebadmus.simplecrudapp.dao;
+package com.loladebadmus.simplecrudapp.movies.dao;
 
-import com.loladebadmus.simplecrudapp.model.Movie;
+import com.loladebadmus.simplecrudapp.movies.model.Movie;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component("movie_list")
-public class MovieDataAccess implements MovieDao{
+class MovieDataAccess implements MovieDao {
 
     final static List<Movie> movie_db = new ArrayList<>();
 

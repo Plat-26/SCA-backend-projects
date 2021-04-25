@@ -1,7 +1,7 @@
-package com.loladebadmus.simplecrudapp.api;
+package com.loladebadmus.simplecrudapp.rentals.api;
 
-import com.loladebadmus.simplecrudapp.model.Rental;
-import com.loladebadmus.simplecrudapp.service.RentalService;
+import com.loladebadmus.simplecrudapp.rentals.model.Rental;
+import com.loladebadmus.simplecrudapp.rentals.service.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

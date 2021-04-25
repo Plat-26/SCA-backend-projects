@@ -1,7 +1,7 @@
-package com.loladebadmus.simplecrudapp.api;
+package com.loladebadmus.simplecrudapp.movies.api;
 
-import com.loladebadmus.simplecrudapp.model.Movie;
-import com.loladebadmus.simplecrudapp.service.MovieService;
+import com.loladebadmus.simplecrudapp.movies.model.Movie;
+import com.loladebadmus.simplecrudapp.movies.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
