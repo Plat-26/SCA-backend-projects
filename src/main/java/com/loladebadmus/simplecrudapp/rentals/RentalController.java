@@ -1,16 +1,16 @@
-package com.loladebadmus.simplecrudapp.rentals.api;
+package com.loladebadmus.simplecrudapp.rentals;
 
-import com.loladebadmus.simplecrudapp.rentals.model.Rental;
-import com.loladebadmus.simplecrudapp.rentals.service.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-@RequestMapping("/rental")
+
 @RestController
+@RequestMapping("/rental")
 public class RentalController {
 
     private final RentalService rentalService;
@@ -21,7 +21,7 @@ public class RentalController {
     }
 
     @PostMapping
-    public void addRental(@RequestBody Rental rental) {
+    public void addRental(@Valid @NotNull @RequestBody Rental rental) {
         rentalService.addRental(rental);
     }
 
@@ -31,17 +31,17 @@ public class RentalController {
     }
 
     @GetMapping(path = "{id}")
-    public Optional<Rental> getRentalById(@PathVariable("id") UUID id) {
+    public Rental getRentalById(@PathVariable("id") Long id) {
         return rentalService.getRentalById(id);
     }
 
     @PutMapping(path = "{id}")
-    public void updateRental(@PathVariable UUID id, @RequestBody Rental rental) {
+    public void updateRental(@PathVariable Long id, @Valid @NotNull@RequestBody Rental rental) {
         rentalService.updateRental(id, rental);
     }
 
     @DeleteMapping(path = "{id}")
-    public void deleteRental(@PathVariable UUID id) {
+    public void deleteRental(@PathVariable Long id) {
         rentalService.deleteRental(id);
     }
 }

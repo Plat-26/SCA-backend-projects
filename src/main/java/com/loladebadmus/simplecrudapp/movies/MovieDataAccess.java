@@ -1,6 +1,5 @@
-package com.loladebadmus.simplecrudapp.movies.dao;
+package com.loladebadmus.simplecrudapp.movies;
 
-import com.loladebadmus.simplecrudapp.movies.model.Movie;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ class MovieDataAccess implements MovieDao {
     final static List<Movie> movie_db = new ArrayList<>();
 
     @Override
-    public int createMovie(UUID id, Movie movie) {
+    public int createMovie(Long id, Movie movie) {
         movie_db.add(new Movie(id, movie.getTitle(), movie.getProducer(), movie.getDesc(), movie.isAvailable()));
         return 0;
     }
@@ -25,14 +24,14 @@ class MovieDataAccess implements MovieDao {
     }
 
     @Override
-    public Optional<Movie> readMovieById(UUID id) {
+    public Optional<Movie> readMovieById(Long id) {
         return movie_db.stream()
                 .filter(movie -> movie.getId().equals(id))
                 .findFirst();
     }
 
     @Override
-    public int updateMovieById(UUID id, Movie newMovie) {
+    public int updateMovieById(Long id, Movie newMovie) {
         return readMovieById(id)
                 .map(movie -> {
                     int index = movie_db.indexOf(movie);
@@ -46,7 +45,7 @@ class MovieDataAccess implements MovieDao {
     }
 
     @Override
-    public int deleteMovieById(UUID id) {
+    public int deleteMovieById(Long id) {
         Optional<Movie> movie = readMovieById(id);
         if(movie.isEmpty()) {
             return 0;

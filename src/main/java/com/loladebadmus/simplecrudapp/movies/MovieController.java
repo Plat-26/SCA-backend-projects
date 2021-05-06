@@ -1,16 +1,15 @@
-package com.loladebadmus.simplecrudapp.movies.api;
+package com.loladebadmus.simplecrudapp.movies;
 
-import com.loladebadmus.simplecrudapp.movies.model.Movie;
-import com.loladebadmus.simplecrudapp.movies.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
-@RequestMapping("/movies")
+
 @RestController
+@RequestMapping("/movies")
 public class MovieController {
     private final MovieService movieService;
 
@@ -20,7 +19,7 @@ public class MovieController {
     }
 
     @PostMapping
-    public void addMovie(@RequestBody Movie movie) {
+    public void addMovie(@Valid @NotNull @RequestBody Movie movie) {
         movieService.addMovie(movie);
     }
 
@@ -30,17 +29,20 @@ public class MovieController {
     }
 
     @GetMapping(path = "{id}")
-    public Optional<Movie> getMovieById(@PathVariable("id") UUID id) {
+    public Movie getMovieById(@PathVariable("id") Long id) {
         return movieService.getMovieById(id);
     }
 
     @PutMapping(path = "{id}")
-    public void updateMovie(@PathVariable UUID id, @RequestBody Movie movie) {
+    public void updateMovie(@PathVariable Long id,
+                            @Valid @NotNull @RequestBody Movie movie) {
         movieService.updateMovie(id, movie);
     }
 
     @DeleteMapping(path = "{id}")
-    public void deleteMovie(@PathVariable UUID id) {
+    public void deleteMovie(@PathVariable Long id) {
         movieService.deleteMovie(id);
     }
+
+    ///TODO:HOW TO VALIDATE PATH VARIABLE
 }
