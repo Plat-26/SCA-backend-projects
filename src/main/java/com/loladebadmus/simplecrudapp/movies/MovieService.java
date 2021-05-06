@@ -1,5 +1,7 @@
 package com.loladebadmus.simplecrudapp.movies;
 
+import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
+import com.loladebadmus.simplecrudapp.errors.IDNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class MovieService {
         Optional<Movie> movieOptional = movieRepository
                 .getMovieByTitle(movie.getTitle());
         if(movieOptional.isPresent()) {
-            throw new IllegalStateException("Movie title is taken");
+            throw new DuplicateDataException("title", movie.getTitle());
         }
         movieRepository.save(movie);
     }
@@ -33,20 +35,20 @@ public class MovieService {
 
     public Movie getMovieById(Long id) {
         return movieRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("Movie with id " + id + "not in database")
+                () -> new IDNotFoundException("Movie" , id)
         );
     }
 
     @Transactional
     public void updateMovie(Long id, Movie movieUpdate) {
         Movie movie = movieRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("Movie with id " + id + "not in database")
+                () -> new IDNotFoundException("Movie" , id)
         );
         if(!Objects.equals(movie.getTitle(), movieUpdate.getTitle())) {
             Optional<Movie> movieOptional = movieRepository
-                    .getMovieByTitle(movie.getTitle());
+                    .getMovieByTitle(movieUpdate.getTitle());
             if(movieOptional.isPresent()) {
-                throw new IllegalStateException("Movie title is taken");
+                throw new DuplicateDataException("title", movieUpdate.getTitle());
             }
         }
         this.updateMovie(movie, movieUpdate);
@@ -55,9 +57,8 @@ public class MovieService {
     public void deleteMovie(Long id) {
         boolean exists = movieRepository.existsById(id);
         if(!exists) {
-            throw new IllegalStateException(
-                    "Movie with id " + id + "not in database"
-            );
+            throw new IDNotFoundException("Movie" , id);
+
         }
         movieRepository.deleteById(id);
     }

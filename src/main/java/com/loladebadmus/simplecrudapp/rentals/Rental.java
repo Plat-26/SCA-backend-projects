@@ -3,13 +3,16 @@ package com.loladebadmus.simplecrudapp.rentals;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-@Entity
+@Entity(name = "Rental")
 @Table(
-        name = "rental",
+        name = "rentals",
         uniqueConstraints = {
-                @UniqueConstraint(name = "rental_unique_constraints", columnNames = "movie-title")
+                @UniqueConstraint(name = "rental_unique_constraints", columnNames = "movie_title")
         }
 )
 public class Rental {
@@ -32,21 +35,23 @@ public class Rental {
 
     @NotBlank
     @Column(
-            name = "movie-title",
+            name = "movie_title",
             nullable = false,
             columnDefinition = "VARCHAR(25)"
     )
     private String movieTitle;
 
-    @NotBlank
     @Column(
             name = "price",
             nullable = false,
             columnDefinition = "INTEGER"
     )
+    @Min(value = 10, message = "Price should not be less than 10")
+    @Max(value = 500, message = "Price should not be greater then 500")
+    @NotNull
     private Integer price;
 
-    @NotBlank
+    @NotNull
     @Column(
             name = "available",
             nullable = false,

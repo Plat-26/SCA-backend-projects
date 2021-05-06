@@ -1,8 +1,10 @@
 package com.loladebadmus.simplecrudapp.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 @Entity
@@ -14,20 +16,17 @@ import java.util.UUID;
 })
 public class User {
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
+
+    @GenericGenerator(name = "user-uuid", strategy = "uuid"
     )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
+            generator = "user_uuid"
     )
     @Column(
             name = "id",
             updatable = false
     )
-    private UUID id; ///todo:How to use UUId for sequence generation
+    private UUID id;
 
 
     @Column(
@@ -35,14 +34,16 @@ public class User {
             nullable = false,
             columnDefinition = "VARCHAR(25)"
     )
+    @NotBlank(message = "Please enter a user name")
     private String name;
 
     public User(
+                @JsonProperty("id") UUID id,
                 @JsonProperty("name") String name) {
         this.name = name;
     }
 
-    public User(UUID id) {
+    public User() {
     }
 
     public UUID getId() {

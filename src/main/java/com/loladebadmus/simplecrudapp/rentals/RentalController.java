@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/rental")
+@RequestMapping("/rentals")
 public class RentalController {
 
     private final RentalService rentalService;
@@ -31,7 +32,7 @@ public class RentalController {
     }
 
     @GetMapping(path = "{id}")
-    public Rental getRentalById(@PathVariable("id") Long id) {
+    public Rental getRentalById(@Valid @NotBlank @PathVariable("id") Long id) {
         return rentalService.getRentalById(id);
     }
 

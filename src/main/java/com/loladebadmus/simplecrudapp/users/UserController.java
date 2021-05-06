@@ -1,11 +1,18 @@
 package com.loladebadmus.simplecrudapp.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -30,12 +37,12 @@ public class UserController {
     }
 
     @GetMapping(path = "{id}")
-    public User getUserById(@PathVariable("id") UUID id) {
+    public User getUserById(@PathVariable("id") @NotBlank UUID id) {
         return userService.getUserById(id);
     }
 
     @PutMapping(path = "{id}")
-    public void updateUser(@PathVariable("id") UUID id,
+    public void updateUser(@PathVariable("id") @NotBlank UUID id,
                            @Valid @NotNull @RequestBody User user) {
         userService.updateUser(id, user);
     }
@@ -44,4 +51,5 @@ public class UserController {
     public void deleteUser(@PathVariable("id") UUID id) {
         userService.deleteUser(id);
     }
+
 }

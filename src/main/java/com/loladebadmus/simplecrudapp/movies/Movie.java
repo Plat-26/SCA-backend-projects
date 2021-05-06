@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-@Entity
+@Entity(name = "Movie")
 @Table(name = "movies",
         uniqueConstraints = {
         @UniqueConstraint(name = "unique_movie_title", columnNames = "title")
@@ -45,12 +46,12 @@ public class Movie {
 
     @NotBlank
     @Column(
-            name = "desc",
+            name = "description",
             columnDefinition = "VARCHAR(50)"
     )
     private String desc;
 
-    @NotBlank
+    @NotNull
     @Column(
             name = "available",
             nullable = false,

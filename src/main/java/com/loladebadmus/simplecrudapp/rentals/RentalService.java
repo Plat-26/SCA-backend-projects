@@ -1,5 +1,7 @@
 package com.loladebadmus.simplecrudapp.rentals;
 
+import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
+import com.loladebadmus.simplecrudapp.errors.IDNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class RentalService {
         Optional<Rental> rentalOptional = rentalRepository
                 .getRentalByTitle(rental.getMovieTitle());
         if(rentalOptional.isPresent()) {
-            throw new IllegalStateException("Rental with movie title " + rental.getMovieTitle() + " already exists");
+            throw new DuplicateDataException("movie-title", rental.getMovieTitle());
         }
         rentalRepository.save(rental);
     }
@@ -33,20 +35,20 @@ public class RentalService {
 
     public Rental getRentalById(Long id) {
         return rentalRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("Rental with id " + id + " not in database")
+                () -> new IDNotFoundException("Rental", id)
         );
     }
 
     @Transactional
     public void updateRental(Long id, Rental rentalUpdate) {
         Rental rental = rentalRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("Rental with id " + id + "not in database")
+                () -> new IDNotFoundException("Rental", id)
         );
         if(!Objects.equals(rental.getMovieTitle(), rentalUpdate.getMovieTitle())) {
             Optional<Rental> rentalOptional = rentalRepository
                     .getRentalByTitle(rentalUpdate.getMovieTitle());
             if(rentalOptional.isPresent()) {
-                throw new IllegalStateException("Rental with movie title " + rental.getMovieTitle() + " already exists");
+                throw new DuplicateDataException("movie-tile", rentalUpdate.getMovieTitle());
             }
         }
 
@@ -56,7 +58,7 @@ public class RentalService {
     public void deleteRental(Long id) {
         boolean exists = rentalRepository.existsById(id);
         if(!exists) {
-            throw new IllegalStateException("Rental with id " + id + " not in database");
+            throw new IDNotFoundException("Rental", id);
         }
     }
 

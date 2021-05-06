@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class MovieController {
     }
 
     @GetMapping(path = "{id}")
-    public Movie getMovieById(@PathVariable("id") Long id) {
+    public Movie getMovieById(@PathVariable("id") @Valid @NotBlank Long id) {
         return movieService.getMovieById(id);
     }
 
@@ -40,9 +41,8 @@ public class MovieController {
     }
 
     @DeleteMapping(path = "{id}")
-    public void deleteMovie(@PathVariable Long id) {
+    public void deleteMovie(@PathVariable @Valid @NotBlank Long id) {
         movieService.deleteMovie(id);
     }
 
-    ///TODO:HOW TO VALIDATE PATH VARIABLE
 }

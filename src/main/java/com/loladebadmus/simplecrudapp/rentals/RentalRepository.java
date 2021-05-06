@@ -10,6 +10,8 @@ import java.util.Optional;
 @Repository
 public interface RentalRepository extends JpaRepository<Rental, Long> {
 
-    @Query("SELECT r FROM rentals WHERE r.title = ?1")
+    @Query("SELECT r FROM Rental r WHERE r.movieTitle = ?1")
     Optional<Rental> getRentalByTitle(String Title);
 }
+
+

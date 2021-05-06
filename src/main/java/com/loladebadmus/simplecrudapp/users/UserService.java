@@ -1,5 +1,7 @@
 package com.loladebadmus.simplecrudapp.users;
 
+import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
+import com.loladebadmus.simplecrudapp.errors.IDNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class UserService {
     public void addUser(User user) {
         Optional<User> userOptional = userRepository.getUserByName(user.getName());
         if(userOptional.isPresent()) {
-            throw new IllegalStateException("This name is already taken");
+            throw new DuplicateDataException("username", user.getName());
         }
         userRepository.save(user);
     }
@@ -33,19 +35,19 @@ public class UserService {
 
     public User getUserById(UUID id) {
         return userRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("User with " + id + "not in database")
+                () -> new IDNotFoundException(id)
         );
     }
 
     @Transactional
     public void updateUser(UUID id, User newUser) {
         User user =  userRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("User with" + id + "not in database")
+                () -> new IDNotFoundException(id)
         );
         if(!Objects.equals(user.getName(), newUser.getName())) {
-            Optional<User> userOptional = userRepository.getUserByName(user.getName());
+            Optional<User> userOptional = userRepository.getUserByName(newUser.getName());
             if(userOptional.isPresent()) {
-                throw new IllegalStateException("This name is already taken");
+                throw new DuplicateDataException("name", newUser.getName());
             }
         }
         user.setName(newUser.getName());
@@ -54,7 +56,7 @@ public class UserService {
     public void deleteUser(UUID id) {
         boolean exists = userRepository.existsById(id);
         if(!exists) {
-            throw new IllegalStateException("User with" + id + "not in database");
+            throw new IDNotFoundException(id);
         }
         userRepository.deleteById(id);
     }
