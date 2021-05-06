@@ -1,7 +1,7 @@
-package com.loladebadmus.simplecrudapp.rentals.service;
+package com.loladebadmus.simplecrudapp.rentals;
 
-import com.loladebadmus.simplecrudapp.rentals.dao.RentalDao;
-import com.loladebadmus.simplecrudapp.rentals.model.Rental;
+import com.loladebadmus.simplecrudapp.rentals.RentalDao;
+import com.loladebadmus.simplecrudapp.rentals.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

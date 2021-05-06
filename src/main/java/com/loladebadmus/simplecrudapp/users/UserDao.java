@@ -1,6 +1,4 @@
-package com.loladebadmus.simplecrudapp.users.dao;
-
-import com.loladebadmus.simplecrudapp.users.model.User;
+package com.loladebadmus.simplecrudapp.users;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,7 @@
-package com.loladebadmus.simplecrudapp.users.service;
+package com.loladebadmus.simplecrudapp.users;
 
-import com.loladebadmus.simplecrudapp.users.dao.UserDao;
-import com.loladebadmus.simplecrudapp.users.model.User;
+import com.loladebadmus.simplecrudapp.users.UserDao;
+import com.loladebadmus.simplecrudapp.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

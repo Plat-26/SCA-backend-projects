@@ -1,6 +1,5 @@
-package com.loladebadmus.simplecrudapp.rentals.dao;
+package com.loladebadmus.simplecrudapp.rentals;
 
-import com.loladebadmus.simplecrudapp.rentals.model.Rental;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

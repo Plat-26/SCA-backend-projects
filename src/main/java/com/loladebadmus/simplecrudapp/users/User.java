@@ -1,4 +1,4 @@
-package com.loladebadmus.simplecrudapp.users.model;
+package com.loladebadmus.simplecrudapp.users;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

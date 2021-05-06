@@ -1,7 +1,5 @@
-package com.loladebadmus.simplecrudapp.users.api;
+package com.loladebadmus.simplecrudapp.users;
 
-import com.loladebadmus.simplecrudapp.users.model.User;
-import com.loladebadmus.simplecrudapp.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

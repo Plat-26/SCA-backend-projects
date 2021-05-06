@@ -1,6 +1,5 @@
-package com.loladebadmus.simplecrudapp.users.dao;
+package com.loladebadmus.simplecrudapp.users;
 
-import com.loladebadmus.simplecrudapp.users.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

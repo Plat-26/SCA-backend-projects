@@ -1,6 +1,5 @@
-package com.loladebadmus.simplecrudapp.movies.dao;
+package com.loladebadmus.simplecrudapp.movies;
 
-import com.loladebadmus.simplecrudapp.movies.model.Movie;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -1,6 +1,4 @@
-package com.loladebadmus.simplecrudapp.movies.dao;
-
-import com.loladebadmus.simplecrudapp.movies.model.Movie;
+package com.loladebadmus.simplecrudapp.movies;
 
 import java.util.List;
 import java.util.Optional;
