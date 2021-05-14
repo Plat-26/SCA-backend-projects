@@ -3,10 +3,7 @@ package com.loladebadmus.simplecrudapp.rentals;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Entity(name = "Rental")
 @Table(
@@ -48,6 +45,7 @@ public class Rental {
     )
     @Min(value = 10, message = "Price should not be less than 10")
     @Max(value = 500, message = "Price should not be greater then 500")
+    @Pattern(regexp = "\\d")
     @NotNull
     private Integer price;
 

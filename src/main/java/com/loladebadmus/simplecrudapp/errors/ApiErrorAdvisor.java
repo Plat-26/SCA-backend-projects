@@ -73,6 +73,7 @@ public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
+
     @ExceptionHandler(DuplicateDataException.class)
     public ResponseEntity<Object> DuplicateDataException(IDNotFoundException ex, WebRequest request) {
         String error = ex.getMessage();

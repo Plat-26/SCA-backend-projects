@@ -9,7 +9,7 @@ public class IDNotFoundException extends RuntimeException{
         super(String.format("User with UUID %s not found", userId));
     }
 
-    public IDNotFoundException(String dataType, Long userId) {
-        super(String.format("%s with id %d not found", dataType, userId));
+    public IDNotFoundException(String objectName, Long userId) {
+        super(String.format("%s with id %d not found", objectName, userId));
     }
 }
