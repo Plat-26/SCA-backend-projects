@@ -39,7 +39,6 @@ public class User {
     @NotBlank(message = "Please enter a user name")
     private String name;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Rental> rentals = new ArrayList<>();
 
@@ -49,10 +48,8 @@ public class User {
 
     public User(
             @JsonProperty("id") UUID id,
-            @JsonProperty("name") String name,
-            List<Rental> rentals) {
+            @JsonProperty("name") String name) {
         this.name = name;
-        this.rentals = rentals;
     }
 
 
@@ -87,5 +84,13 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public List<Rental> retrieveRentals() {
+        return this.rentals;
+    }
+
+    public void updateRentals(List<Rental> rentals) {
+        this.rentals = rentals;
     }
 }

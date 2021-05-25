@@ -29,11 +29,11 @@ public class Rental {
     @Column(updatable = false)
     private LocalDateTime rentalTime;
 
-    @ManyToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToOne
+    @OneToOne(optional = false)
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private Movie movie;
 

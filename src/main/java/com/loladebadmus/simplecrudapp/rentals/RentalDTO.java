@@ -1,14 +1,20 @@
 package com.loladebadmus.simplecrudapp.rentals;
 
-import java.util.UUID;
+import javax.validation.constraints.NotBlank;
 
 public class RentalDTO {
-    String username;
-    String movieTitle;
+
+    @NotBlank
+    private String username;
+    @NotBlank
+    private String movieTitle;
 
     public RentalDTO(String username, String movieTitle) {
         this.username = username;
         this.movieTitle = movieTitle;
+    }
+
+    public RentalDTO() {
     }
 
     public String getUsername() {
