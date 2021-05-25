@@ -2,6 +2,7 @@ package com.loladebadmus.simplecrudapp.users;
 
 import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
 import com.loladebadmus.simplecrudapp.errors.IDNotFoundException;
+import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,12 @@ public class UserService {
         );
     }
 
+    public User getUserByName(String username) {
+        return userRepository.getUserByName(username).orElseThrow(
+                () -> new ResourceNotFoundException("This user is missing, check name or register")
+        );
+    }
+
     @Transactional
     public void updateUser(UUID id, User newUser) {
         User user =  userRepository.findById(id).orElseThrow(
@@ -51,6 +58,8 @@ public class UserService {
             }
         }
         user.setName(newUser.getName());
+        ///todo:TRack new changes
+        user.setRentals(newUser.getRentals());
     }
 
     public void deleteUser(UUID id) {
@@ -60,4 +69,6 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+
 }

@@ -10,6 +10,8 @@ import java.util.Optional;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
-    @Query(value = "SELECT m FROM Movies m WHERE m.title = ?1", nativeQuery = true)
+    @Query(value = "SELECT m FROM Movie m WHERE m.title = ?1")
     Optional<Movie> getMovieByTitle(String Title);
+
+//    , nativeQuery = true
 }

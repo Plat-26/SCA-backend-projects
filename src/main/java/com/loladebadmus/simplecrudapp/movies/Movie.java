@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Entity(name = "Movie")
 @Table(name = "movies",
@@ -59,16 +60,22 @@ public class Movie {
     )
     private boolean isAvailable;
 
+    @Column(precision = 2)
+    private BigDecimal price;
+
     public Movie(
                  @JsonProperty("title") String title,
                  @JsonProperty("producer") String producer,
                  @JsonProperty("description") String desc,
-                 @JsonProperty("available") boolean isAvailable) {
+                 @JsonProperty("available") boolean isAvailable,
+                 @JsonProperty("price") BigDecimal price) {
         this.title = title;
         this.producer = producer;
         this.desc = desc;
         this.isAvailable = isAvailable;
+        this.price = price;
     }
+
     public Movie() {
 
     }
@@ -107,6 +114,14 @@ public class Movie {
 
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     @Override

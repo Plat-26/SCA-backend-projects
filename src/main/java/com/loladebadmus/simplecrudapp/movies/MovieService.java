@@ -2,6 +2,7 @@ package com.loladebadmus.simplecrudapp.movies;
 
 import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
 import com.loladebadmus.simplecrudapp.errors.IDNotFoundException;
+import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,12 @@ public class MovieService {
     public Movie getMovieById(Long id) {
         return movieRepository.findById(id).orElseThrow(
                 () -> new IDNotFoundException("Movie" , id)
+        );
+    }
+
+    public Movie getMovieByTitle(String title) {
+        return movieRepository.getMovieByTitle(title).orElseThrow(
+                () -> new ResourceNotFoundException("Movie title not mapped, try another title")
         );
     }
 

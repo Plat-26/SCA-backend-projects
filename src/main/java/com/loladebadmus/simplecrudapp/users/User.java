@@ -1,10 +1,13 @@
 package com.loladebadmus.simplecrudapp.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.loladebadmus.simplecrudapp.rentals.Rental;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -42,7 +45,18 @@ public class User {
         this.name = name;
     }
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rental> rentals = new ArrayList<>();
+
     public User() {
+    }
+
+    public void addRental(Rental rental) {
+        this.getRentals().add(rental);
+    }
+
+    public  void removeRental(Rental rental) {
+        this.getRentals().remove(rental);
     }
 
     public UUID getId() {
@@ -51,6 +65,14 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public List<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(List<Rental> rentals) {
+        this.rentals = rentals;
     }
 
     public void setId(UUID id) {
