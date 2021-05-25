@@ -29,8 +29,9 @@ public class RentalController {
 
     @PostMapping
     public void createRentalFromDTO(@RequestBody RentalDTO rentalDTO) {
-        rentalService.convertRentalDTOToEntity(rentalDTO);
+        rentalService.addRental(rentalDTO);
     }
+
 //
 //    @GetMapping("/rentals/{rentalId}/users/{userId}")
 //    public List<Rental> getRentalByUserId(@PathVariable(value = "userId") UUID userId, @PathVariable(value = "rentalId") Long rentalId) {
@@ -45,6 +46,11 @@ public class RentalController {
     @GetMapping(path = "{id}")
     public Rental getRentalById(@Valid @NotBlank @PathVariable("id") Long id) {
         return rentalService.getRentalById(id);
+    }
+
+    @PutMapping(path = "{rentalId}")
+    public void updateRental(@PathVariable Long rentalId, @Valid @NotNull @RequestBody RentalDTO rentalDTO) {
+        rentalService.updateRental(rentalId, rentalDTO);
     }
 
 //    @PutMapping(path = "{id}")

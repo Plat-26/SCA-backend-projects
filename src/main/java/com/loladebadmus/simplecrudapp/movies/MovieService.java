@@ -1,7 +1,6 @@
 package com.loladebadmus.simplecrudapp.movies;
 
 import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
-import com.loladebadmus.simplecrudapp.errors.IDNotFoundException;
 import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@ public class MovieService {
 
     public Movie getMovieById(Long id) {
         return movieRepository.findById(id).orElseThrow(
-                () -> new IDNotFoundException("Movie" , id)
+                () -> new ResourceNotFoundException("Movie" , id)
         );
     }
 
@@ -49,7 +48,7 @@ public class MovieService {
     @Transactional
     public void updateMovie(Long id, Movie movieUpdate) {
         Movie movie = movieRepository.findById(id).orElseThrow(
-                () -> new IDNotFoundException("Movie" , id)
+                () -> new ResourceNotFoundException("Movie" , id)
         );
         if(!Objects.equals(movie.getTitle(), movieUpdate.getTitle())) {
             Optional<Movie> movieOptional = movieRepository
@@ -64,7 +63,7 @@ public class MovieService {
     public void deleteMovie(Long id) {
         boolean exists = movieRepository.existsById(id);
         if(!exists) {
-            throw new IDNotFoundException("Movie" , id);
+            throw new ResourceNotFoundException("Movie" , id);
 
         }
         movieRepository.deleteById(id);

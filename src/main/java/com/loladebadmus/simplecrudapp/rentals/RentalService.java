@@ -1,7 +1,5 @@
 package com.loladebadmus.simplecrudapp.rentals;
 
-import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
-import com.loladebadmus.simplecrudapp.errors.IDNotFoundException;
 import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
 import com.loladebadmus.simplecrudapp.movies.Movie;
 import com.loladebadmus.simplecrudapp.movies.MovieService;
@@ -14,7 +12,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+
 
 
 @Service
@@ -30,28 +28,29 @@ public class RentalService {
         this.userService = userService;
     }
 
-//    public void addRental(Rental rental) {
-//        Optional<Rental> rentalOptional = rentalRepository
-//                .getRentalByTitle(rental.getMovieTitle());
-//        if(rentalOptional.isPresent()) {
-//            throw new DuplicateDataException("movie-title", rental.getMovieTitle());
-//        }
-//        rentalRepository.save(rental);
-//    }
-
     public List<Rental> getAllRentals() {
         return rentalRepository.findAll();
     }
 
     public Rental getRentalById(Long id) {
         return rentalRepository.findById(id).orElseThrow(
-                () -> new IDNotFoundException("Rental", id)
+                () -> new ResourceNotFoundException("Rental", id)
         );
+    }
+
+    @Transactional
+    public void addRental(RentalDTO rentalDTO) {
+        Rental rental = convertRentalDTOToEntity(rentalDTO);
+        rental.setRentalTime(LocalDateTime.now());
+        User user = rental.getUser();
+        user.addRental(rental);
+//        userService.updateUser(user.getId(), user);
+        rentalRepository.save(rental);
     }
 
 
     @Transactional
-    public Rental convertRentalDTOToEntity(RentalDTO rentalDTO) {
+    private Rental convertRentalDTOToEntity(RentalDTO rentalDTO) {
         Rental rental = new Rental();
         Movie movie = movieService.getMovieByTitle(rentalDTO.getMovieTitle());
         if(movie == null) {
@@ -63,50 +62,32 @@ public class RentalService {
         }
         rental.setUser(user);
         rental.setMovie(movie);
-        rental.setRentalTime(LocalDateTime.now());
-        user.addRental(rental);
-        userService.updateUser(user.getId(), user);
-        rentalRepository.save(rental);
         return rental;
     }
 
 
-//    @Transactional
-//    public void updateRental(Long id, RentalDTO rentalDTO) {
-//        Rental rental = rentalRepository.findById(id).orElseThrow(
-//                () -> new IDNotFoundException("Rental", id)
-//        );
-//
-//        this.updateRental(rental, rentalDTO);
-//    }
-
-
-//    @Transactional
-//    public void updateRental(Long id, Rental rentalUpdate) {
-//        Rental rental = rentalRepository.findById(id).orElseThrow(
-//                () -> new IDNotFoundException("Rental", id)
-//        );
-//        if(!Objects.equals(rental.getMovieTitle(), rentalUpdate.getMovieTitle())) {
-//            Optional<Rental> rentalOptional = rentalRepository
-//                    .getRentalByTitle(rentalUpdate.getMovieTitle());
-//            if(rentalOptional.isPresent()) {
-//                throw new DuplicateDataException("movie-tile", rentalUpdate.getMovieTitle());
-//            }
-//        }
-//
-//        this.updateRental(rental, rentalUpdate);
-//    }
-
-    public void deleteRental(Long id) {
-        boolean exists = rentalRepository.existsById(id);
-        if(!exists) {
-            throw new IDNotFoundException("Rental", id);
+    @Transactional
+    public void updateRental(Long id, RentalDTO rentalDTO) {
+        Rental rental = rentalRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Rental", id)
+        );
+        if(!Objects.equals(rental.getUser().getName(), rentalDTO.getUsername())) {
+            throw new IllegalStateException("Only the initial user can update a rental, create a new rental instead");
         }
+
+        rental.setMovie(movieService.getMovieByTitle(rentalDTO.movieTitle));
+        rental.setRentalTime(LocalDateTime.now());
     }
 
-//    private void updateRental(Rental current, Rental rentalUpdate) {
-//        current.setMovieTitle(rentalUpdate.getMovieTitle());
-//        current.setPrice(rentalUpdate.getPrice());
-//        current.setAvailable(rentalUpdate.isAvailable());
-//    }
+
+    public void deleteRental(Long id) {
+        Rental rental = rentalRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Rental", id)
+        );
+        User rentalUser = rental.getUser();
+        rental.setUser(null);
+        rentalUser.removeRental(rental);
+        rentalRepository.deleteById(id);
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.loladebadmus.simplecrudapp.users;
 
 import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
-import com.loladebadmus.simplecrudapp.errors.IDNotFoundException;
 import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@ public class UserService {
 
     public User getUserById(UUID id) {
         return userRepository.findById(id).orElseThrow(
-                () -> new IDNotFoundException(id)
+                () -> new ResourceNotFoundException(id)
         );
     }
 
@@ -49,7 +48,7 @@ public class UserService {
     @Transactional
     public void updateUser(UUID id, User newUser) {
         User user =  userRepository.findById(id).orElseThrow(
-                () -> new IDNotFoundException(id)
+                () -> new ResourceNotFoundException(id)
         );
         if(!Objects.equals(user.getName(), newUser.getName())) {
             Optional<User> userOptional = userRepository.getUserByName(newUser.getName());
@@ -58,17 +57,15 @@ public class UserService {
             }
         }
         user.setName(newUser.getName());
-        ///todo:TRack new changes
-        user.setRentals(newUser.getRentals());
+//        ///todo:TRack new changes
+//        user.setRentals(newUser.getRentals());
     }
 
     public void deleteUser(UUID id) {
         boolean exists = userRepository.existsById(id);
         if(!exists) {
-            throw new IDNotFoundException(id);
+            throw new ResourceNotFoundException(id);
         }
         userRepository.deleteById(id);
     }
-
-
 }

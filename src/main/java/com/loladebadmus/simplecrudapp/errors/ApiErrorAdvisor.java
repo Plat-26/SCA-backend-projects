@@ -17,7 +17,9 @@ import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
-//This class handles all errors associated with client request from all end points
+/*
+ * This class handles all errors associated with client requests from all end points
+ */
 
 @ControllerAdvice
 public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
@@ -65,8 +67,8 @@ public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
 
-    @ExceptionHandler(IDNotFoundException.class)
-    public ResponseEntity<Object> handleIDNotFoundException(IDNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         String error = ex.getMessage();
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, error);
 
@@ -75,7 +77,7 @@ public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateDataException.class)
-    public ResponseEntity<Object> DuplicateDataException(IDNotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> handleDuplicateDataException(ResourceNotFoundException ex, WebRequest request) {
         String error = ex.getMessage();
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, error);
 
