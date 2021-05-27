@@ -1,5 +1,6 @@
 package com.loladebadmus.simplecrudapp.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.loladebadmus.simplecrudapp.rentals.Rental;
 import org.hibernate.annotations.GenericGenerator;
@@ -39,6 +40,7 @@ public class User {
     @NotBlank(message = "Please enter a user name")
     private String name;
 
+    @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Rental> rentals = new ArrayList<>();
 
@@ -48,17 +50,23 @@ public class User {
 
     public User(
             @JsonProperty("id") UUID id,
-            @JsonProperty("name") String name) {
+            @JsonProperty("name") String name,
+            List<Rental> rentals) {
         this.name = name;
+        this.rentals = rentals;
     }
+
+
 
 
     public void addRental(Rental rental) {
-        this.rentals.add(rental);
+//        this.rentals.add(rental);
+        this.getRentals().add(rental);
     }
 
     public  void removeRental(Rental rental) {
-        this.rentals.remove(rental);
+//        this.rentals.remove(rental);
+        this.getRentals().remove(rental);
     }
 
     public UUID getId() {
@@ -91,6 +99,14 @@ public class User {
     }
 
     public void updateRentals(List<Rental> rentals) {
+        this.rentals = rentals;
+    }
+
+    public List<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(List<Rental> rentals) {
         this.rentals = rentals;
     }
 }

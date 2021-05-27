@@ -75,7 +75,7 @@ public class RentalService {
             throw new IllegalStateException("Only the initial user can update a rental, create a new rental instead");
         }
 
-        rental.setMovie(movieService.getMovieByTitle(rentalDTO.movieTitle));
+        rental.setMovie(movieService.getMovieByTitle(rentalDTO.getMovieTitle()));
         rental.setRentalTime(LocalDateTime.now());
     }
 

@@ -1,5 +1,6 @@
 package com.loladebadmus.simplecrudapp.rentals;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.loladebadmus.simplecrudapp.movies.Movie;
 import com.loladebadmus.simplecrudapp.users.User;
 
@@ -31,6 +32,7 @@ public class Rental {
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnoreProperties("rentals")
     private User user;
 
     @OneToOne(optional = false)
