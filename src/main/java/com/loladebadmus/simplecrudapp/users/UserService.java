@@ -57,9 +57,6 @@ public class UserService {
             }
         }
         user.setName(newUser.getName());
-//        ///todo:TRack new changes
-//        user.updateRentals(newUser.retrieveRentals());
-//        user.setRentals(newUser.getRentals());
     }
 
     public void deleteUser(UUID id) {

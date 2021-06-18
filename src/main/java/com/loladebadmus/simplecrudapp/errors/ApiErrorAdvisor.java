@@ -17,7 +17,7 @@ import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * This class handles all errors associated with client requests from all end points
  */
 

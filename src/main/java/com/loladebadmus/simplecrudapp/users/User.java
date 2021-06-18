@@ -47,7 +47,6 @@ public class User {
     public User() {
     }
 
-
     public User(
             @JsonProperty("id") UUID id,
             @JsonProperty("name") String name,
@@ -56,16 +55,11 @@ public class User {
         this.rentals = rentals;
     }
 
-
-
-
     public void addRental(Rental rental) {
-//        this.rentals.add(rental);
         this.getRentals().add(rental);
     }
 
     public  void removeRental(Rental rental) {
-//        this.rentals.remove(rental);
         this.getRentals().remove(rental);
     }
 
@@ -77,7 +71,6 @@ public class User {
         return name;
     }
 
-
     public void setId(UUID id) {
         this.id = id;
     }
@@ -86,13 +79,6 @@ public class User {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
 
     public List<Rental> retrieveRentals() {
         return this.rentals;
@@ -108,5 +94,13 @@ public class User {
 
     public void setRentals(List<Rental> rentals) {
         this.rentals = rentals;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

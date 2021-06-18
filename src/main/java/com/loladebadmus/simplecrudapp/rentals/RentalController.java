@@ -8,8 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-
-
 @RestController
 @RequestMapping("/rentals")
 public class RentalController {
@@ -27,12 +25,6 @@ public class RentalController {
         rentalService.addRental(rentalDTO);
     }
 
-//
-//    @GetMapping("/rentals/{rentalId}/users/{userId}")
-//    public List<Rental> getRentalByUserId(@PathVariable(value = "userId") UUID userId, @PathVariable(value = "rentalId") Long rentalId) {
-//
-//    }
-
     @GetMapping
     public List<Rental> getAllRentals() {
         return rentalService.getAllRentals();
@@ -47,7 +39,6 @@ public class RentalController {
     public void updateRental(@PathVariable Long rentalId, @Valid @NotNull @RequestBody RentalDTO rentalDTO) {
         rentalService.updateRental(rentalId, rentalDTO);
     }
-
 
     @DeleteMapping(path = "{id}")
     public void deleteRental(@PathVariable Long id) {

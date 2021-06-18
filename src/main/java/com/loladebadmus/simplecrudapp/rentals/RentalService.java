@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-
-
 @Service
 public class RentalService {
     private final RentalRepository rentalRepository;
@@ -44,7 +42,6 @@ public class RentalService {
         rental.setRentalTime(LocalDateTime.now());
         User user = rental.getUser();
         user.addRental(rental);
-//        userService.updateUser(user.getId(), user);
         rentalRepository.save(rental);
     }
 
@@ -65,7 +62,6 @@ public class RentalService {
         return rental;
     }
 
-
     @Transactional
     public void updateRental(Long id, RentalDTO rentalDTO) {
         Rental rental = rentalRepository.findById(id).orElseThrow(
@@ -74,11 +70,9 @@ public class RentalService {
         if(!Objects.equals(rental.getUser().getName(), rentalDTO.getUsername())) {
             throw new IllegalStateException("Only the initial user can update a rental, create a new rental instead");
         }
-
         rental.setMovie(movieService.getMovieByTitle(rentalDTO.getMovieTitle()));
         rental.setRentalTime(LocalDateTime.now());
     }
-
 
     public void deleteRental(Long id) {
         Rental rental = rentalRepository.findById(id).orElseThrow(
