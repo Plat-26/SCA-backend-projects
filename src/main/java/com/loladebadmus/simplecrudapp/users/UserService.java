@@ -2,7 +2,6 @@ package com.loladebadmus.simplecrudapp.users;
 
 import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
 import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
-import com.loladebadmus.simplecrudapp.movies.MovieRepository;
 import com.loladebadmus.simplecrudapp.rentals.Rental;
 import com.loladebadmus.simplecrudapp.rentals.RentalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
