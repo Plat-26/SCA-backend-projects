@@ -2,6 +2,9 @@ package com.loladebadmus.simplecrudapp.users;
 
 import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
 import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
+import com.loladebadmus.simplecrudapp.movies.MovieRepository;
+import com.loladebadmus.simplecrudapp.rentals.Rental;
+import com.loladebadmus.simplecrudapp.rentals.RentalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +18,12 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RentalRepository rentalRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RentalRepository rentalRepository) {
         this.userRepository = userRepository;
+        this.rentalRepository = rentalRepository;
     }
 
     public void addUser(User user) {
@@ -64,6 +69,10 @@ public class UserService {
         if(!exists) {
             throw new ResourceNotFoundException(id);
         }
+        Rental rental = rentalRepository.findByUserId(id).get();
+        rental.setUser(null);
+        User user = userRepository.findById(id).get();
+        user.setRentals(null);
         userRepository.deleteById(id);
     }
 }

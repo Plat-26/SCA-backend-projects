@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 @Entity(name = "Movie")
 @Table(name = "movies",
@@ -29,7 +28,7 @@ public class Movie {
     )
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Please enter the movie title")
     @Column(
             name = "title",
             nullable = false,
@@ -37,7 +36,7 @@ public class Movie {
     )
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "Please enter the movie producer name")
     @Column(
             name = "producer",
             nullable = false,
@@ -45,7 +44,7 @@ public class Movie {
     )
     private String producer;
 
-    @NotBlank
+    @NotBlank(message = "Please give a movie description")
     @Column(
             name = "description",
             columnDefinition = "VARCHAR(50)"
@@ -61,14 +60,14 @@ public class Movie {
     private boolean isAvailable;
 
     @Column(precision = 2)
-    private BigDecimal price;
+    private Double price;
 
     public Movie(
                  @JsonProperty("title") String title,
                  @JsonProperty("producer") String producer,
                  @JsonProperty("description") String desc,
                  @JsonProperty("available") boolean isAvailable,
-                 @JsonProperty("price") BigDecimal price) {
+                 @JsonProperty("price") Double price) {
         this.title = title;
         this.producer = producer;
         this.desc = desc;
@@ -116,11 +115,11 @@ public class Movie {
         isAvailable = available;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

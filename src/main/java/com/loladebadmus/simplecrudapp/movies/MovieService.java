@@ -2,6 +2,8 @@ package com.loladebadmus.simplecrudapp.movies;
 
 import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
 import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
+import com.loladebadmus.simplecrudapp.rentals.Rental;
+import com.loladebadmus.simplecrudapp.rentals.RentalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,13 @@ import java.util.Optional;
 @Service
 public class MovieService {
     private final MovieRepository movieRepository;
+    private final RentalRepository rentalRepository;
+//    private final RentalService rentalService;
 
     @Autowired
-    public MovieService(MovieRepository movieRepository) {
+    public MovieService(MovieRepository movieRepository, RentalRepository rentalRepository) {
         this.movieRepository = movieRepository;
+        this.rentalRepository = rentalRepository;
     }
 
     public void addMovie(Movie movie) {
@@ -66,6 +71,10 @@ public class MovieService {
             throw new ResourceNotFoundException("Movie" , id);
 
         }
+        Rental rental = rentalRepository.findByMovieId(id).orElseThrow(
+                () -> new ResourceNotFoundException("")
+        );
+        rental.setMovie(null);
         movieRepository.deleteById(id);
     }
 

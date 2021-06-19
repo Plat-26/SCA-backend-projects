@@ -1,15 +1,18 @@
 package com.loladebadmus.simplecrudapp.rentals;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotBlank;
 
 public class RentalDTO {
 
-    @NotBlank
+    @NotBlank(message = "Please enter an existing username to create a rental")
     private String username;
-    @NotBlank
+    @NotBlank(message = "Please enter a movie title to create a rental")
     private String movieTitle;
 
-    public RentalDTO(String username, String movieTitle) {
+    public RentalDTO(@JsonProperty("username") String username,
+                     @JsonProperty("movie-title") String movieTitle) {
         this.username = username;
         this.movieTitle = movieTitle;
     }

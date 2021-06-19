@@ -30,12 +30,12 @@ public class Rental {
     @Column(updatable = false)
     private LocalDateTime rentalTime;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnoreProperties("rentals")
     private User user;
 
-    @OneToOne(optional = false)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private Movie movie;
 

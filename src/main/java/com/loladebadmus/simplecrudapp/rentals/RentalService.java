@@ -63,12 +63,12 @@ public class RentalService {
     }
 
     @Transactional
-    public void updateRental(Long id, RentalDTO rentalDTO) {
+    public void updateRental(Long id, RentalDTO rentalDTO) throws IllegalAccessException {
         Rental rental = rentalRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Rental", id)
         );
         if(!Objects.equals(rental.getUser().getName(), rentalDTO.getUsername())) {
-            throw new IllegalStateException("Only the initial user can update a rental, create a new rental instead");
+            throw new IllegalAccessException("Only the initial user can update a rental, create a new rental instead");
         }
         rental.setMovie(movieService.getMovieByTitle(rentalDTO.getMovieTitle()));
         rental.setRentalTime(LocalDateTime.now());
@@ -82,6 +82,12 @@ public class RentalService {
         rental.setUser(null);
         rentalUser.removeRental(rental);
         rentalRepository.deleteById(id);
+    }
+
+    public Rental getRentalByMovie(Long id) {
+        return rentalRepository.findByMovieId(id).orElseThrow(
+                () -> new ResourceNotFoundException("Moive", id)
+        );
     }
 
 }
