@@ -36,7 +36,7 @@ public class RentalController {
     }
 
     @PutMapping(path = "{rentalId}")
-    public void updateRental(@PathVariable Long rentalId, @Valid @NotNull @RequestBody RentalDTO rentalDTO) {
+    public void updateRental(@PathVariable Long rentalId, @Valid @NotNull @RequestBody RentalDTO rentalDTO) throws IllegalAccessException {
         rentalService.updateRental(rentalId, rentalDTO);
     }
 
