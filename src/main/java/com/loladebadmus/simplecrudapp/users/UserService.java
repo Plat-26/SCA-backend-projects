@@ -1,28 +1,40 @@
 package com.loladebadmus.simplecrudapp.users;
 
 import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
+import com.loladebadmus.simplecrudapp.errors.FailedRegistrationException;
 import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
 import com.loladebadmus.simplecrudapp.rentals.Rental;
 import com.loladebadmus.simplecrudapp.rentals.RentalRepository;
+import com.loladebadmus.simplecrudapp.users.token.ConfirmationToken;
+import com.loladebadmus.simplecrudapp.users.token.ConfirmationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final RentalRepository rentalRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Autowired
-    public UserService(UserRepository userRepository, RentalRepository rentalRepository) {
+    public UserService(UserRepository userRepository, RentalRepository rentalRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ConfirmationTokenService confirmationTokenService) {
         this.userRepository = userRepository;
         this.rentalRepository = rentalRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.confirmationTokenService = confirmationTokenService;
     }
 
     public void addUser(User user) {
@@ -73,5 +85,38 @@ public class UserService {
         User user = userRepository.findById(id).get();
         user.setRentals(null);
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return userRepository.findByEmail(s).orElseThrow(
+                () -> new ResourceNotFoundException("This user email is not associated with a user, go to /register to continue")
+        );
+    }
+
+    @Transactional
+    public String signUpUser(User user) {
+        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
+        if(userExists) {
+            User savedUser = userRepository.findByEmail(user.getEmail()).get();
+            if(!savedUser.getEnabled()) {
+                //todo send confirmation token associated with user again
+            }
+            throw new FailedRegistrationException("This email is already taken, go to /login");
+        }
+        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        //todo: Use a jwt token instead
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(12),
+                user
+        );
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        return token;
     }
 }

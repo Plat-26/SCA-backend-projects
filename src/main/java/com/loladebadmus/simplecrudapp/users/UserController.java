@@ -1,5 +1,7 @@
 package com.loladebadmus.simplecrudapp.users;
 
+import com.loladebadmus.simplecrudapp.users.registration.RegistrationRequestDTO;
+import com.loladebadmus.simplecrudapp.users.registration.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,16 +15,18 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
 
-    public final UserService userService;
+    private final UserService userService;
+    private final RegistrationService registrationService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RegistrationService registrationService) {
         this.userService = userService;
+        this.registrationService = registrationService;
     }
 
-    @PostMapping
-    public void addUser(@Valid @NotNull @RequestBody User user) {
-        userService.addUser(user);
+    @PostMapping("/register")
+    public void addUser(@Valid @NotNull @RequestBody RegistrationRequestDTO requestDTO) {
+        registrationService.register(requestDTO);
     }
 
     @GetMapping
@@ -45,5 +49,4 @@ public class UserController {
     public void deleteUser(@PathVariable("id") UUID id) {
         userService.deleteUser(id);
     }
-
 }
