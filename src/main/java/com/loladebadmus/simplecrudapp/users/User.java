@@ -1,19 +1,16 @@
 package com.loladebadmus.simplecrudapp.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.loladebadmus.simplecrudapp.rentals.Rental;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "users",
@@ -52,7 +49,8 @@ public class User implements UserDetails {
     @JsonView
     private String email;
     private String password;
-    private UserRole role;
+    @Enumerated
+    private UserRole userRole;
     private Boolean enabled = false;
     private Boolean locked = false;
 
@@ -65,25 +63,18 @@ public class User implements UserDetails {
     }
 
 
-    public User(@NotBlank(message = "Please enter your first name") String firstName, @NotBlank(message = "Please enter your last name") String lastName, @NotBlank(message = "Please enter your email address") String email, String password, UserRole role) {
+    public User(@NotBlank(message = "Please enter your first name") String firstName, @NotBlank(message = "Please enter your last name") String lastName, @NotBlank(message = "Please enter your email address") String email, String password, UserRole userRole) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.role = role;
-    }
-
-    public User(
-            @JsonProperty("id") UUID id,
-            @JsonProperty("name") String name,
-            List<Rental> rentals) {
-        this.firstName = name;
-        this.rentals = rentals;
+        this.userRole = userRole;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
+        return Collections.singletonList(authority);
     }
 
     @Override
@@ -98,22 +89,22 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return !locked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return !enabled;
+        return enabled;
     }
 
     public void addRental(Rental rental) {
@@ -160,12 +151,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public UserRole getRole() {
-        return role;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setRole(UserRole role) {
-        this.role = role;
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
     public Boolean getEnabled() {

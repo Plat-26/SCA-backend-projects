@@ -31,15 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/register/**")
                 .permitAll()
                 .anyRequest()
-                .authenticated();
-
-        http.formLogin()
-                .loginPage("/login")
-                .permitAll();
+                .authenticated().and().formLogin();
 
         http.formLogin()
                 .defaultSuccessUrl("/success", true);
-
     }
 
     @Override

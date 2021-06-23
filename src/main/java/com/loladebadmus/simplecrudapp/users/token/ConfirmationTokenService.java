@@ -1,6 +1,9 @@
 package com.loladebadmus.simplecrudapp.users.token;
 
+import com.loladebadmus.simplecrudapp.errors.FailedRegistrationException;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class ConfirmationTokenService {
@@ -13,5 +16,20 @@ public class ConfirmationTokenService {
 
     public void saveConfirmationToken(ConfirmationToken confirmationToken) {
         confirmationTokenRepository.save(confirmationToken);
+    }
+
+    public ConfirmationToken getToken(String token) {
+        return confirmationTokenRepository.findByToken(token).orElseThrow(
+                () -> new FailedRegistrationException("Token not find")
+        );
+    }
+
+    public boolean setConfirmedAt(String token) {
+        ConfirmationToken confirmationToken = confirmationTokenRepository.findByToken(token).orElseThrow(
+                () -> new FailedRegistrationException("Token not found")
+        );
+
+        confirmationToken.setConfirmedAt(LocalDateTime.now());
+        return true;
     }
 }

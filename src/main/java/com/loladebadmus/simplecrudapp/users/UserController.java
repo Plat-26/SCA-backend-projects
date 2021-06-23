@@ -29,6 +29,11 @@ public class UserController {
         registrationService.register(requestDTO);
     }
 
+    @GetMapping("/register")
+    public String confirmUser(@RequestParam("token") String token) {
+        return registrationService.confirmToken(token);
+    }
+
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();

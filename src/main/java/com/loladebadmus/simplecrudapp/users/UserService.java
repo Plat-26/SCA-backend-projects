@@ -37,13 +37,13 @@ public class UserService implements UserDetailsService {
         this.confirmationTokenService = confirmationTokenService;
     }
 
-    public void addUser(User user) {
-        Optional<User> userOptional = userRepository.getUserByName(user.getName());
-        if(userOptional.isPresent()) {
-            throw new DuplicateDataException("username", user.getName());
-        }
-        userRepository.save(user);
-    }
+//    public void addUser(User user) {
+//        Optional<User> userOptional = userRepository.getUserByName(user.getName());
+//        if(userOptional.isPresent()) {
+//            throw new DuplicateDataException("username", user.getName());
+//        }
+//        userRepository.save(user);
+//    }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -88,9 +88,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return userRepository.findByEmail(s).orElseThrow(
-                () -> new ResourceNotFoundException("This user email is not associated with a user, go to /register to continue")
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException("This user email is not associated with a user, go to /register to continue")
         );
     }
 
@@ -118,5 +118,13 @@ public class UserService implements UserDetailsService {
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
         return token;
+    }
+
+    public boolean enableAppUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new FailedRegistrationException("User not found")
+        );
+        user.setEnabled(true);
+        return true;
     }
 }
