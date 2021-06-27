@@ -37,14 +37,6 @@ public class UserService implements UserDetailsService {
         this.confirmationTokenService = confirmationTokenService;
     }
 
-//    public void addUser(User user) {
-//        Optional<User> userOptional = userRepository.getUserByName(user.getName());
-//        if(userOptional.isPresent()) {
-//            throw new DuplicateDataException("username", user.getName());
-//        }
-//        userRepository.save(user);
-//    }
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
