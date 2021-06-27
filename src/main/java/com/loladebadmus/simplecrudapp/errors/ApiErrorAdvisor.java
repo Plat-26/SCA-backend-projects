@@ -35,9 +35,7 @@ public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
             errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
         }
 
-        ApiError apiError = new ApiError(
-                HttpStatus.BAD_REQUEST,
-                errors);
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, errors);
 
         return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
     }
@@ -58,13 +56,10 @@ public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
     public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
             MethodArgumentTypeMismatchException ex, WebRequest request) {
-        String error =
-                ex.getName() + " should be of type " + ex.getRequiredType().getName();
+        String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
 
-        ApiError apiError =
-                new ApiError(HttpStatus.BAD_REQUEST, error);
-        return new ResponseEntity<Object>(
-                apiError, new HttpHeaders(), apiError.getStatus());
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, error);
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -72,15 +67,22 @@ public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
         String error = ex.getMessage();
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, error);
 
-        return new ResponseEntity<Object>(
-                apiError, new HttpHeaders(), apiError.getStatus());
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
     @ExceptionHandler(DuplicateDataException.class)
     public ResponseEntity<Object> handleDuplicateDataException(ResourceNotFoundException ex, WebRequest request) {
         String error = ex.getMessage();
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, error);
+        ApiError apiError = new ApiError(HttpStatus.IM_USED, error);
 
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), apiError.getStatus(), request);
+    }
+
+    @ExceptionHandler(FailedRegistrationException.class)
+    public ResponseEntity<Object> handleRegistrationException(FailedRegistrationException ex, WebRequest request) {
+        String error = ex.getMessage();
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, error);
+
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 }
