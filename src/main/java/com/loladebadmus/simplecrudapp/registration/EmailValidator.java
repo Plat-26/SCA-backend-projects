@@ -1,4 +1,4 @@
-package com.loladebadmus.simplecrudapp.users.registration;
+package com.loladebadmus.simplecrudapp.registration;
 
 import org.springframework.stereotype.Service;
 

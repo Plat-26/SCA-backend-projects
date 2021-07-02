@@ -1,4 +1,4 @@
-package com.loladebadmus.simplecrudapp.users.registration;
+package com.loladebadmus.simplecrudapp.registration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

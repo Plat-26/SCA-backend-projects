@@ -1,7 +1,7 @@
 package com.loladebadmus.simplecrudapp.users;
 
-import com.loladebadmus.simplecrudapp.users.registration.RegistrationRequestDTO;
-import com.loladebadmus.simplecrudapp.users.registration.RegistrationService;
+import com.loladebadmus.simplecrudapp.registration.RegistrationRequestDTO;
+import com.loladebadmus.simplecrudapp.registration.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

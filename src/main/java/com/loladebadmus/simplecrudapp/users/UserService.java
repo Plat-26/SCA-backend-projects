@@ -5,8 +5,8 @@ import com.loladebadmus.simplecrudapp.errors.FailedRegistrationException;
 import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
 import com.loladebadmus.simplecrudapp.rentals.Rental;
 import com.loladebadmus.simplecrudapp.rentals.RentalRepository;
-import com.loladebadmus.simplecrudapp.users.token.ConfirmationToken;
-import com.loladebadmus.simplecrudapp.users.token.ConfirmationTokenService;
+import com.loladebadmus.simplecrudapp.registration.token.ConfirmationToken;
+import com.loladebadmus.simplecrudapp.registration.token.ConfirmationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -92,6 +92,7 @@ public class UserService implements UserDetailsService {
         if(userExists) {
             User savedUser = userRepository.findByEmail(user.getEmail()).get();
             if(!savedUser.getEnabled()) {
+
                 //todo send confirmation token associated with user again
             }
             throw new FailedRegistrationException("This email is already taken, go to /login");
@@ -100,7 +101,6 @@ public class UserService implements UserDetailsService {
         user.setPassword(encodedPassword);
         userRepository.save(user);
 
-        //todo: Use a jwt token instead
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
@@ -112,11 +112,12 @@ public class UserService implements UserDetailsService {
         return token;
     }
 
-    public boolean enableAppUser(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new FailedRegistrationException("User not found")
-        );
-        user.setEnabled(true);
-        return true;
+    public int enableAppUser(String email) {
+        return userRepository.enableAppUser(email);
+//        User user = userRepository.findByEmail(email).orElseThrow(
+//                () -> new FailedRegistrationException("User not found")
+//        );
+//        user.setEnabled(true);
+//        return true;
     }
 }

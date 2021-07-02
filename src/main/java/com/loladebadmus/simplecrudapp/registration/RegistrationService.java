@@ -1,12 +1,12 @@
-package com.loladebadmus.simplecrudapp.users.registration;
+package com.loladebadmus.simplecrudapp.registration;
 
 import com.loladebadmus.simplecrudapp.errors.FailedRegistrationException;
 import com.loladebadmus.simplecrudapp.users.User;
 import com.loladebadmus.simplecrudapp.users.UserRole;
 import com.loladebadmus.simplecrudapp.users.UserService;
-import com.loladebadmus.simplecrudapp.users.email.EmailSender;
-import com.loladebadmus.simplecrudapp.users.token.ConfirmationToken;
-import com.loladebadmus.simplecrudapp.users.token.ConfirmationTokenService;
+import com.loladebadmus.simplecrudapp.registration.email.EmailSender;
+import com.loladebadmus.simplecrudapp.registration.token.ConfirmationToken;
+import com.loladebadmus.simplecrudapp.registration.token.ConfirmationTokenService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

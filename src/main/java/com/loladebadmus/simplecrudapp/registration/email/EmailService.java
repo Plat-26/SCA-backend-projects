@@ -1,4 +1,4 @@
-package com.loladebadmus.simplecrudapp.users.email;
+package com.loladebadmus.simplecrudapp.registration.email;
 
 import com.loladebadmus.simplecrudapp.errors.FailedRegistrationException;
 import org.slf4j.Logger;

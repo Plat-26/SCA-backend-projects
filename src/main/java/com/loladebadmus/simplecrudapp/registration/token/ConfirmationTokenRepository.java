@@ -1,4 +1,4 @@
-package com.loladebadmus.simplecrudapp.users.token;
+package com.loladebadmus.simplecrudapp.registration.token;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

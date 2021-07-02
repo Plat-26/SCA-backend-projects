@@ -1,4 +1,4 @@
-package com.loladebadmus.simplecrudapp.users.token;
+package com.loladebadmus.simplecrudapp.registration.token;
 
 import com.loladebadmus.simplecrudapp.errors.FailedRegistrationException;
 import org.springframework.stereotype.Service;

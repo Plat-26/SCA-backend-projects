@@ -33,7 +33,6 @@ public class User implements UserDetails {
     @JsonView
     private UUID id;
 
-
     @Column(
             name = "name",
             nullable = false,
@@ -70,6 +69,7 @@ public class User implements UserDetails {
         this.password = password;
         this.userRole = userRole;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
