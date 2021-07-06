@@ -48,7 +48,7 @@ public class User implements UserDetails {
     @JsonView
     private String email;
     private String password;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private UserRole userRole;
     private Boolean enabled = false;
     private Boolean locked = false;

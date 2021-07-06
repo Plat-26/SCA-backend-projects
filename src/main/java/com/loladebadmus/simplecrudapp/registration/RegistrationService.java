@@ -30,7 +30,7 @@ public class RegistrationService {
         boolean isValidEmail = emailValidator.test(requestDTO.getEmail());
 
         if(!isValidEmail) {
-            throw new FailedRegistrationException("The provided email is invalid");
+            throw new FailedRegistrationException(String.format("The provided email %s is invlalid", requestDTO.getEmail()));
         }
         String token = userService.signUpUser(new User(
                 requestDTO.getFirstName(),
@@ -54,7 +54,8 @@ public class RegistrationService {
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if(expiredAt.isBefore(LocalDateTime.now())) {
-            throw new FailedRegistrationException("Token expired");
+            //TODO: send a new token to user
+            throw new FailedRegistrationException("Token expired please confirm your new token");
         }
 
         confirmationTokenService.setConfirmedAt(token);

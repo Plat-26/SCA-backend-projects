@@ -25,12 +25,12 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void addUser(@Valid @NotNull @RequestBody RegistrationRequestDTO requestDTO) {
-        registrationService.register(requestDTO);
+    public String addUser(@Valid @NotNull @RequestBody RegistrationRequestDTO requestDTO) {
+        return registrationService.register(requestDTO);
     }
 
-    @GetMapping("/register")
-    public String confirmUser(@RequestParam("token") String token) {
+    @GetMapping("/register/confirm")
+    public String confirmUserToken(@RequestParam("token") String token) {
         return registrationService.confirmToken(token);
     }
 
