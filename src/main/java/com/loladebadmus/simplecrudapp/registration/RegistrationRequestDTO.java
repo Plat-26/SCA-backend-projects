@@ -13,6 +13,8 @@ public class RegistrationRequestDTO {
     private final String email;
     @NotBlank(message = "Please enter a password")
     private final String password;
+    //TODO: include confirm password field
+    //TODO: include password greater than 7 chars constraints
 
     public RegistrationRequestDTO(
             @JsonProperty("first-name") String firstName,
