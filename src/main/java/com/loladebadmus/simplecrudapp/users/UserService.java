@@ -114,10 +114,5 @@ public class UserService implements UserDetailsService {
 
     public int enableAppUser(String email) {
         return userRepository.enableAppUser(email);
-//        User user = userRepository.findByEmail(email).orElseThrow(
-//                () -> new FailedRegistrationException("User not found")
-//        );
-//        user.setEnabled(true);
-//        return true;
     }
 }
