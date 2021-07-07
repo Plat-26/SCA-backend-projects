@@ -29,7 +29,7 @@ public class UserController {
         return registrationService.register(requestDTO);
     }
 
-    @PostMapping("/register/confirm")
+    @GetMapping("/register/confirm")
     public String confirmUserToken(@RequestParam("token") String token) {
         return registrationService.confirmToken(token);
     }
