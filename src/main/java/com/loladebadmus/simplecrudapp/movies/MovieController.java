@@ -20,8 +20,8 @@ public class MovieController {
     }
 
     @PostMapping
-    public void addMovie(@Valid @NotNull @RequestBody Movie movie) {
-        movieService.addMovie(movie);
+    public Movie addMovie(@Valid @NotNull @RequestBody Movie movie) {
+        return movieService.addMovie(movie);
     }
 
     @GetMapping
