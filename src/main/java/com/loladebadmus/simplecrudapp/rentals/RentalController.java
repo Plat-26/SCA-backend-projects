@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -31,8 +32,14 @@ public class RentalController {
     }
 
     @GetMapping(path = "{id}")
-    public Rental getRentalById(@Valid @NotBlank @PathVariable("id") Long id) {
-        return rentalService.getRentalById(id);
+    public Rental getRentalById(@Valid @NotBlank @PathVariable("id") Long id, Principal principal) throws IllegalAccessException {
+
+        Rental loadedRental = rentalService.getRentalById(id);
+
+        if(!principal.getName().equals(loadedRental.getUser().getEmail())) {
+            throw new IllegalAccessException("This resource can only be accessed by the owner");
+        }
+        return loadedRental;
     }
 
     @PutMapping(path = "{rentalId}")

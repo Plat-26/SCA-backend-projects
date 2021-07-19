@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -42,8 +43,12 @@ public class UserController {
     }
 
     @GetMapping(path = "{id}")
-    public UserDTO getUserById(@PathVariable("id") @NotBlank UUID id) {
+    public UserDTO getUserById(@PathVariable("id") @NotBlank UUID id, Principal principal) throws IllegalAccessException {
+
         User loadedUser = userService.getUserById(id);
+        if(!principal.getName().equals(loadedUser.getEmail())) {
+            throw new IllegalAccessException("This resource can only be accessed by owner");
+        }
         return convertUserToUserDTO(loadedUser);
     }
 
