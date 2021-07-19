@@ -1,7 +1,6 @@
 package com.loladebadmus.simplecrudapp.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.loladebadmus.simplecrudapp.rentals.Rental;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,7 +29,6 @@ public class User implements UserDetails {
             name = "id",
             updatable = false
     )
-    @JsonView
     private UUID id;
 
     @Column(
@@ -39,13 +37,10 @@ public class User implements UserDetails {
             columnDefinition = "VARCHAR(25)"
     )
     @NotBlank(message = "Please enter your first name")
-    @JsonView
     private String firstName;
     @NotBlank(message = "Please enter your last name")
-    @JsonView
     private String lastName;
     @NotBlank(message = "Please enter your email address")
-    @JsonView
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
@@ -53,7 +48,6 @@ public class User implements UserDetails {
     private Boolean enabled = false;
     private Boolean locked = false;
 
-    @JsonView
     @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Rental> rentals = new ArrayList<>();
