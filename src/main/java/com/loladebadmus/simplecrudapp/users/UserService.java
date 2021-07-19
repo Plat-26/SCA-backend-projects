@@ -7,6 +7,7 @@ import com.loladebadmus.simplecrudapp.rentals.Rental;
 import com.loladebadmus.simplecrudapp.rentals.RentalRepository;
 import com.loladebadmus.simplecrudapp.registration.token.ConfirmationToken;
 import com.loladebadmus.simplecrudapp.registration.token.ConfirmationTokenService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -115,4 +116,5 @@ public class UserService implements UserDetailsService {
     public int enableAppUser(String email) {
         return userRepository.enableAppUser(email);
     }
+
 }

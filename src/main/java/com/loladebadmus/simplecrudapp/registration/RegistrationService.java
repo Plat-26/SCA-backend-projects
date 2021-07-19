@@ -9,6 +9,7 @@ import com.loladebadmus.simplecrudapp.registration.token.ConfirmationToken;
 import com.loladebadmus.simplecrudapp.registration.token.ConfirmationTokenService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Service
@@ -26,6 +27,7 @@ public class RegistrationService {
         this.emailValidator = emailValidator;
     }
 
+    @Transactional
     public String register(RegistrationRequestDTO requestDTO) {
         boolean isValidEmail = emailValidator.test(requestDTO.getEmail());
 
@@ -44,6 +46,7 @@ public class RegistrationService {
         return token;
     }
 
+    @Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token);
 
