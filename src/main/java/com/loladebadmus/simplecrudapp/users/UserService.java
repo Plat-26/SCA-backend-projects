@@ -7,6 +7,7 @@ import com.loladebadmus.simplecrudapp.rentals.Rental;
 import com.loladebadmus.simplecrudapp.rentals.RentalRepository;
 import com.loladebadmus.simplecrudapp.registration.token.ConfirmationToken;
 import com.loladebadmus.simplecrudapp.registration.token.ConfirmationTokenService;
+import com.loladebadmus.simplecrudapp.security.oauth.GoogleOauthUserDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -117,4 +118,20 @@ public class UserService implements UserDetailsService {
         return userRepository.enableAppUser(email);
     }
 
+    public User processOAuthPostLogin(GoogleOauthUserDTO googleOauthUser) {
+         Boolean isPresent = userRepository.findByEmail(googleOauthUser.getEmail()).isPresent();
+
+         if(isPresent) {
+             //todo: merge user data
+         }
+
+         User newUser = new User();
+         newUser.setEnabled(true);
+         newUser.setEmail(googleOauthUser.getEmail());
+         newUser.setUserRole(UserRole.USER);
+         newUser.setName(googleOauthUser.getFirstName());
+         newUser.setLastName(googleOauthUser.getLastName());
+         newUser.setLocked(false);
+         return userRepository.save(newUser);
+    }
 }
