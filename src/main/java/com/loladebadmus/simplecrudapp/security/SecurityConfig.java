@@ -1,5 +1,7 @@
 package com.loladebadmus.simplecrudapp.security;
 
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
 import com.loladebadmus.simplecrudapp.errors.AuthFailureHandler;
 import com.loladebadmus.simplecrudapp.security.jwt.JwtTokenVerifier;
 import com.loladebadmus.simplecrudapp.security.jwt.JwtUsernameAndPasswordFilter;
@@ -33,11 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserService userService;
     private final CustomOAuth2UserService oAuth2UserService;
+    private final NetHttpTransport transport;
+    private final JsonFactory jsonFactory;
 
-    public SecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, UserService userService, CustomOAuth2UserService oAuth2UserService) {
+    public SecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, UserService userService, CustomOAuth2UserService oAuth2UserService, NetHttpTransport transport, JsonFactory jsonFactory) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userService = userService;
         this.oAuth2UserService = oAuth2UserService;
+        this.transport = transport;
+        this.jsonFactory = jsonFactory;
     }
 
 

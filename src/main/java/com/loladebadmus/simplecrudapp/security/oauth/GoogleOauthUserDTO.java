@@ -2,12 +2,10 @@ package com.loladebadmus.simplecrudapp.security.oauth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Map;
 
-@Service
 public class GoogleOauthUserDTO implements OAuth2User {
 
     private OAuth2User oAuth2User;
