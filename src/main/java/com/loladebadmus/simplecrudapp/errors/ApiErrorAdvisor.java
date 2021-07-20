@@ -12,8 +12,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.Enumerated;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +69,7 @@ public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
         String error = ex.getMessage();
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, error);
 
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+        return handleExceptionInternal(ex, apiError, new HttpHeaders(), apiError.getStatus(), request);
     }
 
     @ExceptionHandler(DuplicateDataException.class)
@@ -83,6 +85,14 @@ public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
         String error = ex.getMessage();
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, error);
 
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+        return handleExceptionInternal(ex, apiError, new HttpHeaders(), apiError.getStatus(), request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest webRequest) {
+        String error = ex.getMessage();
+        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, error);
+
+        return handleExceptionInternal(ex, apiError, new HttpHeaders(), apiError.getStatus(), webRequest);
     }
 }

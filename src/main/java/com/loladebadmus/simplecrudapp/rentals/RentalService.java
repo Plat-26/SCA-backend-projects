@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class RentalService {
@@ -90,4 +91,9 @@ public class RentalService {
         );
     }
 
+    public Rental getRentalByUserId(UUID userId) {
+        return rentalRepository.findByUserId(userId).orElseThrow(
+                () -> new ResourceNotFoundException("There's no rental associated with this user")
+        );
+    }
 }
