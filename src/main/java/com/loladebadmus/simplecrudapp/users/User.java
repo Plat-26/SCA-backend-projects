@@ -55,7 +55,6 @@ public class User implements UserDetails {
     public User() {
     }
 
-
     public User(@NotBlank(message = "Please enter your first name") String firstName, @NotBlank(message = "Please enter your last name") String lastName, @NotBlank(message = "Please enter your email address") String email, String password, UserRole userRole) {
         this.firstName = firstName;
         this.lastName = lastName;

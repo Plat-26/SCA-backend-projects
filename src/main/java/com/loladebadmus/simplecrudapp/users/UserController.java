@@ -66,6 +66,7 @@ public class UserController {
     private UserDTO convertUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
+        userDTO.setRentalList(user.getRentals());
         return userDTO;
     }
 
