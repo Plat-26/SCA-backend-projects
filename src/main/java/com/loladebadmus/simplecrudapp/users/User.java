@@ -49,7 +49,7 @@ public class User implements UserDetails {
     private Boolean locked = false;
 
     @JsonIgnoreProperties("user")
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Rental> rentals = new ArrayList<>();
 
     public User() {
@@ -112,16 +112,16 @@ public class User implements UserDetails {
         return id;
     }
 
-    public String getName() {
-        return firstName;
-    }
-
     public void setId(UUID id) {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.firstName = name;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {

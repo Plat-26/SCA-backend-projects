@@ -88,8 +88,8 @@ public class ApiErrorAdvisor extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), apiError.getStatus(), request);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest webRequest) {
+    @ExceptionHandler(IllegalAccessException.class)
+    public ResponseEntity<Object> handleIllegalAccessException(IllegalAccessException ex, WebRequest webRequest) {
         String error = ex.getMessage();
         ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, error);
 

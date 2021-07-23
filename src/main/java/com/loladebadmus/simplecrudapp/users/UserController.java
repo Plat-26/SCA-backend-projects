@@ -2,10 +2,12 @@ package com.loladebadmus.simplecrudapp.users;
 
 import com.loladebadmus.simplecrudapp.registration.RegistrationRequestDTO;
 import com.loladebadmus.simplecrudapp.registration.RegistrationService;
+import com.loladebadmus.simplecrudapp.rentals.Rental;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -42,10 +44,9 @@ public class UserController {
         return convertListOfUsersToDTOs((ArrayList<User>) userService.getAllUsers());
     }
 
-    @GetMapping(path = "{id}")
-    public UserDTO getUserById(@PathVariable("id") @NotBlank UUID id, Principal principal) throws IllegalAccessException {
-
-        User loadedUser = userService.getUserById(id);
+    @GetMapping(path = "{userId}")
+    public UserDTO getUserById(@PathVariable("id") @NotBlank UUID userId, Principal principal) throws IllegalAccessException {
+        User loadedUser = userService.getUserById(userId);
         if(!principal.getName().equals(loadedUser.getEmail())) {
             throw new IllegalAccessException("This resource can only be accessed by owner");
         }
@@ -63,16 +64,27 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    private UserDTO convertUserToUserDTO(User user) {
+    @Transactional
+    UserDTO convertUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
-        userDTO.setRentalList(user.getRentals());
+        userDTO.setUserId(user.getId());
+
+        if(!user.getRentals().isEmpty()) {
+            for(Rental rental : user.getRentals()) {
+                userDTO.getRentalIds().add(rental.getId());
+            }
+        }
         return userDTO;
     }
 
-    private ArrayList<UserDTO> convertListOfUsersToDTOs(ArrayList<User> users) {
-        ArrayList<UserDTO> userDTOS = new ArrayList<>();
+    @Transactional
+    ArrayList<UserDTO> convertListOfUsersToDTOs(List<User> users) {
+        if(users.isEmpty()) {
+            return new ArrayList<>();
+        }
 
+        ArrayList<UserDTO> userDTOS = new ArrayList<>();
         for(User user: users) {
             userDTOS.add(convertUserToUserDTO(user));
         }

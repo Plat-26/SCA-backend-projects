@@ -60,13 +60,16 @@ public class UserService implements UserDetailsService {
         User user =  userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(id)
         );
-        if(!Objects.equals(user.getName(), newUser.getName())) {
-            Optional<User> userOptional = userRepository.getUserByName(newUser.getName());
+        if(!Objects.equals(user.getEmail(), newUser.getEmail())) {
+            Optional<User> userOptional = userRepository.findByEmail(newUser.getEmail());
             if(userOptional.isPresent()) {
-                throw new DuplicateDataException("name", newUser.getName());
+                throw new DuplicateDataException("email", newUser.getEmail());
             }
         }
-        user.setName(newUser.getName());
+        user.setEmail(newUser.getEmail());
+        user.setFirstName(newUser.getFirstName().isEmpty() ? user.getFirstName() : newUser.getFirstName());
+        user.setLastName(newUser.getLastName().isEmpty() ? user.getLastName() : newUser.getLastName());
+        userRepository.save(user);
     }
 
     public void deleteUser(UUID id) {
@@ -124,12 +127,11 @@ public class UserService implements UserDetailsService {
          if(isPresent) {
              //todo: merge user data
          }
-
          User newUser = new User();
          newUser.setEnabled(true);
          newUser.setEmail(googleOauthUser.getEmail());
          newUser.setUserRole(UserRole.USER);
-         newUser.setName(googleOauthUser.getFirstName());
+         newUser.setFirstName(googleOauthUser.getFirstName());
          newUser.setLastName(googleOauthUser.getLastName());
          newUser.setLocked(false);
          return userRepository.save(newUser);

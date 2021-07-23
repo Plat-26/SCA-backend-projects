@@ -38,12 +38,12 @@ public class RentalService {
     }
 
     @Transactional
-    public void addRental(RentalDTO rentalDTO) {
+    public Rental addRental(RentalDTO rentalDTO) {
         Rental rental = convertRentalDTOToEntity(rentalDTO);
         rental.setRentalTime(LocalDateTime.now());
         User user = rental.getUser();
         user.addRental(rental);
-        rentalRepository.save(rental);
+        return rentalRepository.save(rental);
     }
 
 
@@ -68,13 +68,15 @@ public class RentalService {
         Rental rental = rentalRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Rental", id)
         );
-        if(!Objects.equals(rental.getUser().getName(), rentalDTO.getUsername())) {
-            throw new IllegalAccessException("Only the initial user can update a rental, create a new rental instead");
+        if(!Objects.equals(rental.getUser().getEmail(), rentalDTO.getUsername())) {
+            throw new IllegalAccessException("Only the initial user can update a rental, create a new rental instead\n" +
+                    "Hint: Use your email as username");
         }
         rental.setMovie(movieService.getMovieByTitle(rentalDTO.getMovieTitle()));
         rental.setRentalTime(LocalDateTime.now());
     }
 
+    @Transactional
     public void deleteRental(Long id) {
         Rental rental = rentalRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Rental", id)

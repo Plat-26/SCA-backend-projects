@@ -4,22 +4,40 @@ import com.loladebadmus.simplecrudapp.rentals.Rental;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UserDTO {
 
+    private UUID userId;
     private String firstName;
     private String lastName;
-    private String email;
-    private List<Rental> rentalList = new ArrayList<>();
+    private String username;
+    private List<Long> rentalIds = new ArrayList<>();
 
-    public UserDTO(String firstName, String lastName, String email, List<Rental> rentalList) {
+    public UserDTO(UUID userId, String firstName, String lastName, String username) {
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
-        this.rentalList = rentalList;
+        this.username = username;
     }
 
     public UserDTO() {
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -38,19 +56,11 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public List<Long> getRentalIds() {
+        return rentalIds;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Rental> getRentalList() {
-        return rentalList;
-    }
-
-    public void setRentalList(List<Rental> rentalList) {
-        this.rentalList = rentalList;
+    public void setRentalIds(List<Long> rentalIds) {
+        this.rentalIds = rentalIds;
     }
 }
