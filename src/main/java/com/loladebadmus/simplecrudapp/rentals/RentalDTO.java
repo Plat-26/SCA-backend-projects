@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class RentalDTO {
 
     private Long rentalId;
-    private Long userId;
+    private UUID userId;
     @NotBlank(message = "Please enter a registered email/username to create a rental")
     private String username;
     @NotBlank(message = "Please enter a movie title to create a rental")
@@ -18,7 +19,7 @@ public class RentalDTO {
 
 
 
-    public RentalDTO(Long rentalId, Long userId, @JsonProperty("username") String username,
+    public RentalDTO(Long rentalId, UUID userId, @JsonProperty("username") String username,
                      @JsonProperty("movie-title") String movieTitle, Double rentalCost, LocalDateTime createdAt) {
         this.rentalId = rentalId;
         this.userId = userId;
@@ -55,11 +56,11 @@ public class RentalDTO {
         this.rentalId = rentalId;
     }
 
-    public Long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 

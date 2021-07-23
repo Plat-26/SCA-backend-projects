@@ -2,7 +2,6 @@ package com.loladebadmus.simplecrudapp.rentals;
 
 import com.loladebadmus.simplecrudapp.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -74,6 +73,7 @@ public class RentalController {
     @Transactional
     RentalDTO convertRentalEntityToDTO(Rental createdRental) {
         RentalDTO rentalDTO = new RentalDTO();
+        rentalDTO.setUserId(createdRental.getUser().getId());
         rentalDTO.setRentalId(createdRental.getId());
         rentalDTO.setMovieTitle(createdRental.getMovie().getTitle());
         rentalDTO.setUsername(createdRental.getUser().getUsername());

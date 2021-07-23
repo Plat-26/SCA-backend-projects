@@ -39,6 +39,11 @@ public class UserController {
         return registrationService.confirmToken(token);
     }
 
+    @GetMapping("/register/oauth-complete")
+    public String googleSignInRedirect() {
+        return "signed in with google";
+    }
+
     @GetMapping
     public List<UserDTO> getAllUsers() {
         return convertListOfUsersToDTOs((ArrayList<User>) userService.getAllUsers());

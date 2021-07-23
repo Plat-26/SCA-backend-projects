@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernameAndPasswordFilter(authenticationManager()))
                 .addFilterAfter(new JwtTokenVerifier(transport, jsonFactory), JwtUsernameAndPasswordFilter.class)
                 .authorizeRequests()
-                .antMatchers("/users/register/**")
+                .antMatchers("/users/register/**", "/logout")
                 .permitAll()
                 .anyRequest()
                 .authenticated().and()
@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                         response.addHeader(SecurityConstants.AUTHORIZATION_HEADER, tokenValue);
                         response.getOutputStream().print(tokenValue); //todo: make token available to client
-                        response.sendRedirect("/users/oauth-complete");
+                        response.sendRedirect("/users/register/oauth-complete");
                     }
                 });
     }
