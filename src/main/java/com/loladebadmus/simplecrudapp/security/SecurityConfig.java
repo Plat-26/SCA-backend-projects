@@ -79,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         String tokenValue = principal.getIdToken().getTokenValue();
 
                         response.addHeader(SecurityConstants.AUTHORIZATION_HEADER, tokenValue);
-                        response.getOutputStream().print(tokenValue); //todo: make token available to client
+                        response.getOutputStream().print(tokenValue);
                         response.sendRedirect("/users/register/oauth-complete");
                     }
                 });

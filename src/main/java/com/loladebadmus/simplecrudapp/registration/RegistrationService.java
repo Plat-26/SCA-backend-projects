@@ -32,7 +32,7 @@ public class RegistrationService {
         boolean isValidEmail = emailValidator.test(requestDTO.getEmail());
 
         if(!isValidEmail) {
-            throw new FailedRegistrationException(String.format("The provided email %s is invlalid", requestDTO.getEmail()));
+            throw new FailedRegistrationException(String.format("The provided email %s is invalid", requestDTO.getEmail()));
         }
         String token = userService.signUpUser(new User(
                 requestDTO.getFirstName(),
@@ -57,15 +57,19 @@ public class RegistrationService {
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if(expiredAt.isBefore(LocalDateTime.now())) {
-            //TODO: send a new token to user
-            throw new FailedRegistrationException("Token expired please confirm your new token");
+
+            User user = confirmationToken.getUser();
+            String newToken = confirmationTokenService.createConfirmationToken(user);
+            String link = "http://localhost:8080/users/register/confirm?token=" + newToken;
+            emailSender.send(user.getEmail(), buildEmail(user.getFirstName(), link));
+
+            throw new FailedRegistrationException("Token expired, please confirm new token sent to email");
         }
 
         confirmationTokenService.setConfirmedAt(token);
         userService.enableAppUser(confirmationToken.getUser().getEmail());
         return "confirmed";
     }
-
     private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +

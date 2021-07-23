@@ -30,12 +30,6 @@ public class User implements UserDetails {
             updatable = false
     )
     private UUID id;
-
-    @Column(
-            name = "name",
-            nullable = false,
-            columnDefinition = "VARCHAR(25)"
-    )
     @NotBlank(message = "Please enter your first name")
     private String firstName;
     @NotBlank(message = "Please enter your last name")
@@ -47,7 +41,8 @@ public class User implements UserDetails {
     private UserRole userRole;
     private Boolean enabled = false;
     private Boolean locked = false;
-
+    @Enumerated(EnumType.STRING)
+    private UserProvider provider = UserProvider.LOCAL;
     @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Rental> rentals = new ArrayList<>();
@@ -190,5 +185,13 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", name='" + firstName + '\'' +
                 '}';
+    }
+
+    public UserProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(UserProvider provider) {
+        this.provider = provider;
     }
 }

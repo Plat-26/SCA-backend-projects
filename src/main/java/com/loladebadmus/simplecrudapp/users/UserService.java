@@ -8,7 +8,6 @@ import com.loladebadmus.simplecrudapp.rentals.RentalRepository;
 import com.loladebadmus.simplecrudapp.registration.token.ConfirmationToken;
 import com.loladebadmus.simplecrudapp.registration.token.ConfirmationTokenService;
 import com.loladebadmus.simplecrudapp.security.oauth.GoogleOauthUserDTO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -97,8 +95,7 @@ public class UserService implements UserDetailsService {
         if(userExists) {
             User savedUser = userRepository.findByEmail(user.getEmail()).get();
             if(!savedUser.getEnabled()) {
-
-                //todo send confirmation token associated with user again
+                throw new FailedRegistrationException("Already signed up, click the link in email to enable account");
             }
             throw new FailedRegistrationException("This email is already taken, go to /login");
         }
@@ -106,34 +103,31 @@ public class UserService implements UserDetailsService {
         user.setPassword(encodedPassword);
         userRepository.save(user);
 
-        String token = UUID.randomUUID().toString();
-        ConfirmationToken confirmationToken = new ConfirmationToken(
-                token,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusHours(12),
-                user
-        );
-        confirmationTokenService.saveConfirmationToken(confirmationToken);
-        return token;
+        return confirmationTokenService.createConfirmationToken(user);
     }
 
     public int enableAppUser(String email) {
         return userRepository.enableAppUser(email);
     }
 
+    @Transactional
     public User processOAuthPostLogin(GoogleOauthUserDTO googleOauthUser) {
-         Boolean isPresent = userRepository.findByEmail(googleOauthUser.getEmail()).isPresent();
+        User oauthUser;
+
+        boolean isPresent = userRepository.findByEmail(googleOauthUser.getEmail()).isPresent();
 
          if(isPresent) {
-             //todo: merge user data
+             oauthUser = userRepository.findByEmail(googleOauthUser.getEmail()).get();
+         } else {
+             oauthUser = new User();
          }
-         User newUser = new User();
-         newUser.setEnabled(true);
-         newUser.setEmail(googleOauthUser.getEmail());
-         newUser.setUserRole(UserRole.USER);
-         newUser.setFirstName(googleOauthUser.getFirstName());
-         newUser.setLastName(googleOauthUser.getLastName());
-         newUser.setLocked(false);
-         return userRepository.save(newUser);
+         oauthUser.setEnabled(true);
+         oauthUser.setEmail(googleOauthUser.getEmail());
+         oauthUser.setUserRole(UserRole.USER);
+         oauthUser.setFirstName(googleOauthUser.getFirstName());
+         oauthUser.setLastName(googleOauthUser.getLastName());
+         oauthUser.setLocked(false);
+         oauthUser.setProvider(UserProvider.GOOGLE);
+         return userRepository.save(oauthUser);
     }
 }
