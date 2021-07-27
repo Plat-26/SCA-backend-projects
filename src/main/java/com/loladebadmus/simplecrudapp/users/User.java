@@ -179,6 +179,7 @@ public class User implements UserDetails {
         this.rentals = rentals;
     }
 
+
     @Override
     public String toString() {
         return "User{" +

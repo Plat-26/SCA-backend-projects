@@ -2,6 +2,7 @@ package com.loladebadmus.simplecrudapp.users;
 
 import com.loladebadmus.simplecrudapp.registration.RegistrationRequestDTO;
 import com.loladebadmus.simplecrudapp.registration.RegistrationService;
+import com.loladebadmus.simplecrudapp.registration.ResetPasswordDTO;
 import com.loladebadmus.simplecrudapp.rentals.Rental;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,16 @@ public class UserController {
         return "signed in with google";
     }
 
+    @PostMapping("/register/forgot-password")
+    public String forgotPassword(@RequestBody @NotBlank String email) {
+        return registrationService.handleForgotPassword(email);
+    }
+
+    @PostMapping("/register/reset-password")
+    public String resetPassword(@RequestParam("token") String token, @RequestBody @Valid ResetPasswordDTO resetPasswordDTO) {
+        return registrationService.resetPassword(token, resetPasswordDTO);
+    }
+
     @GetMapping
     public List<UserDTO> getAllUsers() {
         return convertListOfUsersToDTOs((ArrayList<User>) userService.getAllUsers());
@@ -68,6 +79,7 @@ public class UserController {
     public void deleteUser(@PathVariable("id") UUID id) {
         userService.deleteUser(id);
     }
+
 
     @Transactional
     UserDTO convertUserToUserDTO(User user) {

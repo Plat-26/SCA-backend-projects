@@ -34,7 +34,7 @@ public class ConfirmationTokenService {
 
     public ConfirmationToken getToken(String token) {
         return confirmationTokenRepository.findByToken(token).orElseThrow(
-                () -> new FailedRegistrationException("Token not find")
+                () -> new FailedRegistrationException("Invalid token")
         );
     }
 

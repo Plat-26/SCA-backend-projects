@@ -3,9 +3,9 @@ package com.loladebadmus.simplecrudapp.users;
 import com.loladebadmus.simplecrudapp.errors.DuplicateDataException;
 import com.loladebadmus.simplecrudapp.errors.FailedRegistrationException;
 import com.loladebadmus.simplecrudapp.errors.ResourceNotFoundException;
+import com.loladebadmus.simplecrudapp.registration.email.EmailSender;
 import com.loladebadmus.simplecrudapp.rentals.Rental;
 import com.loladebadmus.simplecrudapp.rentals.RentalRepository;
-import com.loladebadmus.simplecrudapp.registration.token.ConfirmationToken;
 import com.loladebadmus.simplecrudapp.registration.token.ConfirmationTokenService;
 import com.loladebadmus.simplecrudapp.security.oauth.GoogleOauthUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +28,15 @@ public class UserService implements UserDetailsService {
     private final RentalRepository rentalRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final EmailSender emailSender;
 
     @Autowired
-    public UserService(UserRepository userRepository, RentalRepository rentalRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ConfirmationTokenService confirmationTokenService) {
+    public UserService(UserRepository userRepository, RentalRepository rentalRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ConfirmationTokenService confirmationTokenService, EmailSender emailSender) {
         this.userRepository = userRepository;
         this.rentalRepository = rentalRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.confirmationTokenService = confirmationTokenService;
+        this.emailSender = emailSender;
     }
 
     public List<User> getAllUsers() {
@@ -129,5 +131,13 @@ public class UserService implements UserDetailsService {
          oauthUser.setLocked(false);
          oauthUser.setProvider(UserProvider.GOOGLE);
          return userRepository.save(oauthUser);
+    }
+
+    @Transactional
+    public String updatePassword(User user, String password) {
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+        return "password reset successful";
     }
 }

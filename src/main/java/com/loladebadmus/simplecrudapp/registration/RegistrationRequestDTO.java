@@ -2,10 +2,9 @@ package com.loladebadmus.simplecrudapp.registration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.annotation.RegEx;
+import javax.swing.*;
+import javax.validation.constraints.*;
 
 public class RegistrationRequestDTO {
     @NotBlank(message = "Please enter your first name")
