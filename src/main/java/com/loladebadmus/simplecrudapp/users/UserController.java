@@ -45,8 +45,8 @@ public class UserController {
         return "signed in with google";
     }
 
-    @PostMapping("/register/forgot-password")
-    public String forgotPassword(@RequestBody @NotBlank String email) {
+    @GetMapping("/register/forgot-password")
+    public String forgotPassword(@RequestParam("email") String email) {
         return registrationService.handleForgotPassword(email);
     }
 
