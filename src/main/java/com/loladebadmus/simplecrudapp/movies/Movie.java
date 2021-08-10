@@ -59,6 +59,7 @@ public class Movie {
     )
     private boolean isAvailable;
 
+    @NotNull
     @Column(precision = 2)
     private Double price;
 
@@ -97,6 +98,10 @@ public class Movie {
 
     public boolean isAvailable() {
         return isAvailable;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setTitle(String title) {

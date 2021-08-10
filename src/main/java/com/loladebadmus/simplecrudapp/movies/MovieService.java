@@ -15,9 +15,8 @@ import java.util.Optional;
 
 @Service
 public class MovieService {
-    private final MovieRepository movieRepository;
-    private final RentalRepository rentalRepository;
-//    private final RentalService rentalService;
+    private MovieRepository movieRepository;
+    private RentalRepository rentalRepository;
 
     @Autowired
     public MovieService(MovieRepository movieRepository, RentalRepository rentalRepository) {
@@ -25,13 +24,16 @@ public class MovieService {
         this.rentalRepository = rentalRepository;
     }
 
-    public void addMovie(Movie movie) {
+    public MovieService() {
+    }
+
+    public Movie addMovie(Movie movie) {
         Optional<Movie> movieOptional = movieRepository
                 .getMovieByTitle(movie.getTitle());
         if(movieOptional.isPresent()) {
             throw new DuplicateDataException("title", movie.getTitle());
         }
-        movieRepository.save(movie);
+        return movieRepository.save(movie);
     }
 
     public List<Movie> getAllMovies() {
@@ -51,7 +53,7 @@ public class MovieService {
     }
 
     @Transactional
-    public void updateMovie(Long id, Movie movieUpdate) {
+    public Movie updateMovie(Long id, Movie movieUpdate) {
         Movie movie = movieRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Movie" , id)
         );
@@ -62,7 +64,7 @@ public class MovieService {
                 throw new DuplicateDataException("title", movieUpdate.getTitle());
             }
         }
-        this.updateMovie(movie, movieUpdate);
+        return movieRepository.save(this.updateMovie(movie, movieUpdate));
     }
 
     public void deleteMovie(Long id) {
@@ -78,10 +80,11 @@ public class MovieService {
         movieRepository.deleteById(id);
     }
 
-    private void updateMovie(Movie current, Movie movieUpdate) {
+    protected Movie updateMovie(Movie current, Movie movieUpdate) {
         current.setTitle(movieUpdate.getTitle());
         current.setProducer(movieUpdate.getProducer());
         current.setAvailable(movieUpdate.isAvailable());
         current.setDesc(movieUpdate.getDesc());
+        return current;
     }
 }
